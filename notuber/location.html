@@ -1,0 +1,58 @@
+<!doctype html>
+
+<html>
+<head>
+<title>notuber</title>
+<script>
+
+	latitude = 0;
+	longitude = 0;
+	
+	function getLocation() {
+		navigator.geolocation.getCurrentPosition(function(somePos) {
+			latitude = somePos.coords.latitude;
+			longitude = somePos.coords.longitude;
+			sendMessages();
+		});	
+	}
+
+	//send my location
+	function sendMessages() {
+		var request = new XMLHttpRequest();
+
+		request.open("POST", "https://jordan-marsh.herokuapp.com/rides", true);
+		request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+		request.onreadystatechange = function() {
+			if (request.readyState == 4 && request.status == 200) {
+				rawData = request.responseText;
+				loc = JSON.parse(rawData);
+				divElement = document.getElementById("location");
+
+				if(loc.vehicles){	
+					for(i = 0; i < loc.vehicles.length; i++){
+						divElement.innerHTML += "<p>" + loc.vehicles[i].username +", "+loc.vehicles[i].lat+", "+loc.vehicles[i].lng + "</p>";
+					}
+				} else {
+					for(i = 0; i < loc.passengers.length; i++){	
+						divElement.innerHTML += "<p>" + loc.passengers[i].username +", "+loc.passengers[i].lat+", "+loc.passengers[i].lng + "</p>";
+					}
+				}
+			}
+		}
+
+		//set sent parameter
+		params = "username=6QbTEruill&lat="
+		params += latitude;
+		params += "&lng=" + longitude;
+		request.send(params);
+	}
+</script>
+
+</head>
+
+<body onload="getLocation()">
+	<h1>Here</h1>
+	<div id="location"></div>
+</body>
+</html>
