@@ -32,7 +32,6 @@
 			if (request.readyState == 4 && request.status == 200) {
 				rawData = request.responseText;
 				loc = JSON.parse(rawData);				
-				console.log(loc);
 				mymap();
 			}
 		}
