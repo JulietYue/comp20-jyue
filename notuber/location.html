@@ -58,11 +58,15 @@
 		var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
 		var close = 99999;
+		var market = false;
+		var type = loc.vehicles;
 
-		if(loc.vehicles){	
+		if(type){	
 			for(i = 0; i < loc.vehicles.length; i++){
+				market = true;
 				var curr_pos = new google.maps.LatLng(loc.vehicles[i].lat, loc.vehicles[i].lng);
-				var distance = google.maps.geometry.spherical.computeDistanceBetween(my_pos, curr_pos);
+				var distance = google.maps.geometry.spherical.computeDistanceBetween(my_pos, curr_pos)* 0.000621371;
+				distance = parseFloat(distance).toFixed(2);
 
 				if(close > distance) {
 					close = distance;
@@ -70,7 +74,7 @@
 
 				var marker = new google.maps.Marker({
 					position:curr_pos,
-					title:loc.vehicles[i].username + "Distance to me is " + distance,
+					title:loc.vehicles[i].username + " is " + distance + " mile(s) away from me",
 					icon:'car.png'
 				});
 				marker.setMap(map);	
@@ -83,8 +87,10 @@
 			}
 		} else {
 			for(i = 0; i < loc.passengers.length; i++){	
+				market = true;
 				var curr_pos = new google.maps.LatLng(loc.passengers[i].lat, loc.passengers[i].lng);
-				var distance = google.maps.geometry.spherical.computeDistanceBetween(my_pos, curr_pos);
+				var distance = google.maps.geometry.spherical.computeDistanceBetween(my_pos, curr_pos) * 0.000621371;
+				distance = parseFloat(distance).toFixed(2);
 
 				if(close > distance) {
 					close = distance;
@@ -92,7 +98,7 @@
 
 				var marker = new google.maps.Marker({
 					position:curr_pos,
-					title:loc.passengers[i].username + "Distance to me is " + distance,
+					title:loc.passengers[i].username + " is " + distance + " mile(s) away from me",
 					icon:'ppl.jpeg'
 				});
 				marker.setMap(map);
@@ -104,12 +110,22 @@
 				});		
 			}
 		}
+
+		var message;
+		if(market) {
+			if(type) {
+				message = '6QbTEruill. The closest vehicle is ' + close + ' mile(s) away';
+			} else {
+				message = '6QbTEruill. The closest passenger is ' + close + ' mile(s) away';
+			}
+		} else {
+			message = '6QbTEruill. There is no one around';
+		}
 		
 		//change meters to miles
-		close = close * 0.000621371
 		var marker = new google.maps.Marker({
 			position: my_pos,
-			title: '6QbTEruill. The closest is ' + close + ' miles away',
+			title: message,
 			icon: 'me.png'
 		});
 		marker.setMap(map);
