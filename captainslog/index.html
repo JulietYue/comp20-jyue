@@ -10,14 +10,18 @@
     <script>
 
         $(document).ready(function() {
-            var date = new Date();
+            for (var i = 0; i < localStorage.length; i++) {
+                $('div').after(localStorage.getItem(localStorage.key(i)));
+            }
 
             $('#msg').keypress(function (event) {
                 if (event.which == 13) {
                     var intake = $("#msg").val();
                     event.preventDefault();
-                    $('div').after('<p>' + date +' - ' + intake + '<p>');
-                    localStorage.setItem(date, intake);
+                    var time = new Date();
+                    var message = '<p>' + time + ' - ' + intake + '<p>';
+                    $('div').after(message);
+                    localStorage.setItem(time.getTime(), message);
                 }
             });
 
