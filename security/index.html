@@ -1,0 +1,69 @@
+<!doctype html> 
+
+<html> 
+
+<head>
+	<title>Assignment 4</title>
+	<meta charset="utf-8" />
+	<style type="text/css">
+		body{
+			font-size: 18px;
+			font-family: "Helvetica";
+		}
+		.sub{
+			font-size: 20px;
+			font-weight: 500;
+		}
+	</style>
+
+</head>
+
+<body>
+	<h1>Assignment 4 - Security</h1>
+	<ol>
+		<li>
+			<h2>Introduction</h2>
+			<p> I have received a web application that deals with real-time vehicle ride requests.
+			My goal is to screen for security and privacy problems in the application</p>
+		</li>
+		<li> 
+			<h2>Medthodology</h2>
+			<p>Followed the suggested "Two step process method" -- First perform "black box" testing, attacking the application without reading the code; then perform "white box" testing after reading the code. I did not use an auxiliary tool in this assignment</p>
+		</li>
+		<li> <h2>Abstract of Findings</h2></li>
+		<li> 
+			<h2>Issues Found</h2>
+			<ol>
+				<li>
+					<h3>XSS</h3>
+					<p> <span class="sub">Location:</span></br> Line 35 in index.js when the application takes in user input</p>
+					<p><span class="sub">Severity of the issue: high</span></br> Scripting is a powerful tool that may cause various issues. It is also a widespread and well-known web security issue that hackers may start from.</p>
+					<p><span class="sub">Description of issue: </span></br> The application stores input from users in the database without sanitize the input. So users can perform attacks by inputing malicious scripts. Since XSS is a very common issue, it was the first thing I tried when I do "black box" testing, and the hacking was successful.
+					<img src="post1.png" alt="post"> </p>
+					<p class="sub"> Proof of vulnerability: </p>
+					<img src="return1.png" alt="return">
+					<img src="result1.png" alt="result">
+					<p><span class="sub">Resolution:</span> </br> The application should sanitize user input by using this line of code -- 
+					$ var username = request.body.username.replace(/[^\w\s]/gi, '');</p>
+				</li>
+				<li>
+					<h3>CORS open to all websites and all HTTP methods</h3>
+					<p> <span class="sub">Location:</span> </br> Line 24-30 in index.js</p>
+					<p><span class="sub">Severity of the issue: medium</span></br> Access-Control-Allow-Origin: * allows everyone to use the server and may cause potential data breach. Similarly with Access-Control-Allow-Methods, the server allows various HTTP methods that are not needed and should not be allowed to execute by users. In this application for now, it is not too big an issue because the server only supports POST and GET methods. However, if the server supports more methods and anyone is allowed to delete, this will not look good.</p>
+					<p><span class="sub">Description of issue: </span></br> I found the issue through looking at the code and the CORS header attracted my attention. I wrote a simple function that uses GET method on '/' page and prints the result to console to check if the attack is successful.
+						<img src="code1.png" alt="screenshot">
+						<img src="hack2.png" alt="return">
+					</p>
+					<p class="sub"> Proof of vulnerability: </p>
+					<img src="result2.png" alt="result">
+					<p><span class="sub">Resolution:</span> </br> Restrict the origin to specific domain(s) and only allow user to execute HTTP POST method</p>
+				</li>
+
+
+			</ol>
+
+		</li>
+	</ol>
+</body>
+
+</html>
