@@ -1,7 +1,6 @@
 <!doctype html> 
 
 <html> 
-
 <head>
 	<title>Assignment 4</title>
 	<meta charset="utf-8" />
@@ -15,22 +14,22 @@
 			font-weight: 500;
 		}
 	</style>
-
 </head>
 
-<body>
+<body onload="hack()">
 	<h1>Assignment 4 - Security</h1>
 	<ol>
 		<li>
 			<h2>Introduction</h2>
-			<p> I have received a web application that deals with real-time vehicle ride requests.
-			My goal is to screen for security and privacy problems in the application</p>
+			<p> Web security is an issue that has long been ignored by developers. I have received a web application that deals with real-time vehicle ride requests. My goal is to screen for security and privacy problems in the application.</p>
 		</li>
 		<li> 
 			<h2>Medthodology</h2>
-			<p>Followed the suggested "Two step process method" -- First perform "black box" testing, attacking the application without reading the code; then perform "white box" testing after reading the code. I did not use an auxiliary tool in this assignment</p>
+			<p>Followed the suggested "Two step process method" -- First perform "black box" testing, attacking the application without reading the code; then perform "white box" testing after reading the code. I did not use an auxiliary tool like Burp in this assignment.</p>
 		</li>
-		<li> <h2>Abstract of Findings</h2></li>
+		<li> <h2>Abstract of Findings</h2>
+			<p> In the secruity screening, I have found three major security vulnerbilities, XSS, CORS, and Sensitive data exposure, which are all common issues shared by many web applications nowaday. While these issues are relatively easy to fix, not spoting/fixing the issue may cause serious trouble in the future.</p>
+		</li>
 		<li> 
 			<h2>Issues Found</h2>
 			<ol>
@@ -58,10 +57,32 @@
 					<img src="result2.png" alt="result">
 					<p><span class="sub">Resolution:</span> <br> Restrict the origin to specific domain(s) and only allow user to execute HTTP POST method</p>
 				</li>
-
-
+				<li>
+					<h3>Sensitive data exposure(Insecured database)</h3>
+					<p> <span class="sub">Location:</span> <br> Line 13-17 in index.js</p>
+					<p><span class="sub">Severity of the issue: high</span><br> </p>
+					<p><span class="sub">Description of issue: </span><br> There is no	admin user of authentication enabled by MongoDB. That being said, everyone can have access to MongoDB database, and any other applications in the computer can modify/corrupt the database. I used mongodb client in my terminal and insert a document that is not a vehicle<br> 
+						<img src="code3.png" alt="screenshot">
+						<img src="hack3.png" alt="result">
+					</p>
+					<p class="sub"> Proof of vulnerability:<br></p>
+					<img src="result3.png" alt="result">
+					<p><span class="sub">Resolution:</span><br> Secured mongodb database and add authentication after the server has connected to the database <a href="http://mongodb.github.io/node-mongodb-native/api-generated/db.html#authenticate"> check here</a></p>
+				</li>
 			</ol>
-
+		</li>
+		<li>
+			<h2>Conclusion</h2>
+			<p>
+				XSS, CORS, and Sensitive data exposure are the three security vulnerablities. According to OWASP resport on Top 10 web application security vulnerablities in 2017, Sensitive data exposure is the third most common vulnerablity while XSS is the 7th. CORS, which I believe can be catagorized as Broken Access Control, is considered as the 5th most common vulnerablity. It is important for developers to really take security into account when developing applications. Nowadays, we are more and more dependent on technologies. The more information we share online, the more important cyber security is, and every developer has the responsibility to protect their application and users' data. 
+			</p>
+		</li>
+		<li>
+			<h2>References</h2>
+			<p> http://mchow01.github.io/docs/SOURCE2013-mchow.pdf<br>
+				https://blog.websecurify.com/2014/08/hacking-nodejs-and-mongodb.html<br>
+				https://www.synopsys.com/blogs/software-security/preventing-common-mean-stack-vulnerabilities/<br>https://lockmedown.com/securing-node-js-mongodb-security-injection-attacks/ <br>
+			 https://www.acunetix.com/vulnerabilities/web/html-injection </p>
 		</li>
 	</ol>
 </body>
